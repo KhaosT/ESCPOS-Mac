@@ -147,7 +147,7 @@
         }
         char bytes;
         [tex getBytes:&bytes range:NSMakeRange(i, 1)];
-        if (bytes == -1 || (bytes > -100 && bytes < -1)) {
+        if (bytes == -1 || (bytes > -95 && bytes < -1)) {
             byte = byte << 1;
         }else{
             byte = byte << 1;
