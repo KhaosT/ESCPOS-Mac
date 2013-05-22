@@ -32,7 +32,8 @@
 
 - (IBAction)PrintTest:(id)sender {
     //[[ESCPOSCore CoreManager]printString:_ContentField.stringValue];
-    [[ESCPOSCore CoreManager]printLeftString:_ContentField.stringValue RightString:_BarCodeSize.stringValue];
+    [[ESCPOSCore CoreManager]printLeftString:_ContentField.stringValue RightString:[NSString stringWithFormat:@"%i",_BarCodeSize.intValue]];
+    //[[ESCPOSCore CoreManager]printImage:[NSImage imageNamed:@"hello.png"]];
     _ContentField.stringValue = @"";
 }
 
@@ -47,6 +48,15 @@
 
 - (IBAction)BarCodeSizeDidChange:(id)sender {
     [_BarCodeSizeDisplay setStringValue:[NSString stringWithFormat:@"%i",_BarCodeSize.intValue]];
+}
+
+- (IBAction)printImageAct:(id)sender {
+    [[ESCPOSCore CoreManager]printImage:_ImageView.image];
+}
+
+-(void)setImageViewImage:(NSImage *)image
+{
+    [_ImageView setImage:image];
 }
 
 - (void)didConnectToHost:(NSString *)host

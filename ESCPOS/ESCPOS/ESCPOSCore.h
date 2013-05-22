@@ -36,6 +36,7 @@ typedef NS_ENUM(NSInteger, BackgroundColorType) {
 
 -(void)didConnectToHost:(NSString *)host;
 -(void)didDisconnect;
+-(void)setImageViewImage:(NSImage *)image;
 
 @end
 

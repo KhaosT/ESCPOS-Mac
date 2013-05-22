@@ -19,11 +19,13 @@
 @property (weak) IBOutlet NSComboBox *BarCodeSelector;
 @property (weak) IBOutlet NSSlider *BarCodeSize;
 @property (weak) IBOutlet NSTextField *BarCodeSizeDisplay;
+@property (weak) IBOutlet NSImageView *ImageView;
 
 - (IBAction)Connect:(id)sender;
 - (IBAction)PrintTest:(id)sender;
 - (IBAction)CutPaperButton:(id)sender;
 - (IBAction)PrintBarCode:(id)sender;
 - (IBAction)BarCodeSizeDidChange:(id)sender;
+- (IBAction)printImageAct:(id)sender;
 
 @end
