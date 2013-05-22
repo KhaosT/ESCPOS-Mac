@@ -31,9 +31,7 @@
 }
 
 - (IBAction)PrintTest:(id)sender {
-    //[[ESCPOSCore CoreManager]printString:_ContentField.stringValue];
-    [[ESCPOSCore CoreManager]printLeftString:_ContentField.stringValue RightString:[NSString stringWithFormat:@"%i",_BarCodeSize.intValue]];
-    //[[ESCPOSCore CoreManager]printImage:[NSImage imageNamed:@"hello.png"]];
+    [[ESCPOSCore CoreManager]printString:_ContentField.stringValue];
     _ContentField.stringValue = @"";
 }
 
@@ -52,6 +50,10 @@
 
 - (IBAction)printImageAct:(id)sender {
     [[ESCPOSCore CoreManager]printImage:_ImageView.image];
+}
+
+- (IBAction)printLeftRight:(id)sender {
+    [[ESCPOSCore CoreManager]printLeftString:_ContentField.stringValue RightString:[NSString stringWithFormat:@"%i",_BarCodeSize.intValue]];
 }
 
 -(void)setImageViewImage:(NSImage *)image

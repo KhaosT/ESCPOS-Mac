@@ -27,5 +27,6 @@
 - (IBAction)PrintBarCode:(id)sender;
 - (IBAction)BarCodeSizeDidChange:(id)sender;
 - (IBAction)printImageAct:(id)sender;
+- (IBAction)printLeftRight:(id)sender;
 
 @end

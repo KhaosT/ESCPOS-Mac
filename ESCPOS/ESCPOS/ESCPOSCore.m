@@ -99,6 +99,7 @@
 	int height = src.size.height;
     
     if (height>255) {
+        NSLog(@"Image Too Large");
         return;
     }
     
