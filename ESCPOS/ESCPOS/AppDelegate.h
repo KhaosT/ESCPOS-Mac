@@ -24,6 +24,7 @@
 @property (weak) IBOutlet NSButton *PLRButton;
 @property (weak) IBOutlet NSButton *PaperCutButton;
 @property (weak) IBOutlet NSButton *QRButton;
+@property (weak) IBOutlet NSButton *RePrintButton;
 
 - (IBAction)Connect:(id)sender;
 - (IBAction)PrintTest:(id)sender;

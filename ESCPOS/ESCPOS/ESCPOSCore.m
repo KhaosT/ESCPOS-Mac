@@ -8,7 +8,7 @@
 
 #import "ESCPOSCore.h"
 
-#define COMM_TIME_OUT           0.5
+#define COMM_TIME_OUT           0.1
 #define NSGB18030StringEncoding 0x80000631
 
 void freeRawData(void *info, const void *data, size_t size);
@@ -158,7 +158,7 @@ void freeRawData(void *info, const void *data, size_t size);
                         byte = 0;
                     }
                     int bytes = bitmapData[i];
-                    if (bytes > 128) {
+                    if (bytes > 144) {
                         byte = byte << 1;
                     }else{
                         byte = byte << 1;
@@ -200,7 +200,7 @@ void freeRawData(void *info, const void *data, size_t size);
                         [_socket writeData:commdata withTimeout:COMM_TIME_OUT tag:2];
                         cc = cc+restleng;
                     }
-                    [NSThread sleepForTimeInterval:0.1];
+                    [NSThread sleepForTimeInterval:0.2];
                 }
             }else{
                 NSMutableData *commdata = [NSMutableData dataWithBytes:"\x1d\x76\x30\x00" length:4];

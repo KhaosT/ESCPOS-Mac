@@ -16,12 +16,12 @@
 		CC095A4C174B6F9F0085118D /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC095A4B174B6F9F0085118D /* Security.framework */; };
 		CC57386C174DBC4900418703 /* bitstream.c in Sources */ = {isa = PBXBuildFile; fileRef = CC57385C174DBC4900418703 /* bitstream.c */; };
 		CC57386D174DBC4900418703 /* mask.c in Sources */ = {isa = PBXBuildFile; fileRef = CC57385E174DBC4900418703 /* mask.c */; };
-		CC57386E174DBC4900418703 /* qrenc.c in Sources */ = {isa = PBXBuildFile; fileRef = CC573860174DBC4900418703 /* qrenc.c */; };
-		CC57386F174DBC4900418703 /* qrencode.c in Sources */ = {isa = PBXBuildFile; fileRef = CC573862174DBC4900418703 /* qrencode.c */; };
+		CC57386E174DBC4900418703 /* qrenc.c in Sources */ = {isa = PBXBuildFile; fileRef = CC573860174DBC4900418703 /* qrenc.c */; settings = {COMPILER_FLAGS = "-w"; }; };
+		CC57386F174DBC4900418703 /* qrencode.c in Sources */ = {isa = PBXBuildFile; fileRef = CC573862174DBC4900418703 /* qrencode.c */; settings = {COMPILER_FLAGS = "-w"; }; };
 		CC573870174DBC4900418703 /* qrinput.c in Sources */ = {isa = PBXBuildFile; fileRef = CC573864174DBC4900418703 /* qrinput.c */; };
 		CC573871174DBC4900418703 /* qrspec.c in Sources */ = {isa = PBXBuildFile; fileRef = CC573866174DBC4900418703 /* qrspec.c */; };
 		CC573872174DBC4900418703 /* rscode.c in Sources */ = {isa = PBXBuildFile; fileRef = CC573868174DBC4900418703 /* rscode.c */; };
-		CC573873174DBC4900418703 /* split.c in Sources */ = {isa = PBXBuildFile; fileRef = CC57386A174DBC4900418703 /* split.c */; };
+		CC573873174DBC4900418703 /* split.c in Sources */ = {isa = PBXBuildFile; fileRef = CC57386A174DBC4900418703 /* split.c */; settings = {COMPILER_FLAGS = "-w"; }; };
 		CCDB961F174B7B7200C71B81 /* ESCPOSCore.m in Sources */ = {isa = PBXBuildFile; fileRef = CCDB961E174B7B7200C71B81 /* ESCPOSCore.m */; };
 		CCDB9622174B7B8E00C71B81 /* GCDAsyncSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = CCDB9621174B7B8E00C71B81 /* GCDAsyncSocket.m */; };
 /* End PBXBuildFile section */

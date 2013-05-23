@@ -50,6 +50,7 @@
 
 - (IBAction)printImageAct:(id)sender {
     [[ESCPOSCore CoreManager]printImage:_ImageView.image];
+    [_RePrintButton setEnabled:YES];
 }
 
 - (IBAction)printLeftRight:(id)sender {
@@ -82,6 +83,7 @@
 - (void)didDisconnect
 {
     [_TestButton setEnabled:NO];
+    [_RePrintButton setEnabled:NO];
     [_QRButton setEnabled:NO];
     [_BarCodeButton setEnabled:NO];
     [_PLRButton setEnabled:NO];
