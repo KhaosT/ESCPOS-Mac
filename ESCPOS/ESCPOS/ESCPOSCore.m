@@ -98,110 +98,122 @@ void freeRawData(void *info, const void *data, size_t size);
 #if TARGET_OS_IPHONE
 
 -(void)printImage:(UIImage *)src{
-
+    
 #else
-
+    
 -(void)printImage:(NSImage *)src{
-
+        
 #endif
-
-    dispatch_queue_t gQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
-    dispatch_async(gQueue, ^{
-        int width = src.size.width;
-        int height = src.size.height;
         
-        NSData  *initdata = [NSData dataWithBytes:"\x0a" length:1];
-        [_socket writeData:initdata withTimeout:COMM_TIME_OUT tag:1];
-        
-        int wL = (width + 7)/8;
-        CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceGray();
-        
-        CGContextRef context = CGBitmapContextCreate (nil,
-                                                      wL*8,
-                                                      height,
-                                                      8,      // bits per component
-                                                      0,
-                                                      colorSpace,
-                                                      kCGImageAlphaNone);
-        
-        CGColorSpaceRelease(colorSpace);
-        
-        CGContextSetRGBFillColor(context, 1.0, 1.0, 1.0, 1.0);
-        CGContextFillRect(context, CGRectMake(0, 0, wL*8, height));
-        
-        CGContextDrawImage(context,
-                           CGRectMake(0, 0, width, height), [src CGImageForProposedRect:nil context:nil hints:nil]);
-        
-        NSImage *grayImage = [[NSImage alloc]initWithCGImage:CGBitmapContextCreateImage(context) size:src.size];
-        CGContextRelease(context);
-        NSData* tiffData = [grayImage TIFFRepresentation];
-        NSBitmapImageRep* bitMapRep = [NSBitmapImageRep
-                                       imageRepWithData:tiffData];
-        NSMutableData *tex = [NSMutableData dataWithBytes:[bitMapRep bitmapData] length:[bitMapRep pixelsWide]*[bitMapRep pixelsHigh]*[bitMapRep samplesPerPixel]*sizeof(unsigned char)];
-        
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [_delegate setImageViewImage:grayImage];
-        });
-        
-        NSMutableData *imageData = [NSMutableData data];
-        int counter = 0;
-        int byte = 0;
-        for (int i=0;i<tex.length;i++) {
-            counter ++;
-            if (counter>7) {
-                [imageData appendBytes:&byte length:1];
-                counter = 0;
-                byte = 0;
-            }
-            char bytes;
-            [tex getBytes:&bytes range:NSMakeRange(i, 1)];
-            if (bytes == -1 || (bytes > -95 && bytes < -1)) {
-                byte = byte << 1;
-            }else{
-                byte = byte << 1;
-                byte = byte + 1;
-            }
-        }
-        [imageData setLength:wL*height];
-        
-        if (height>100) {
-            for (int cc=0; cc<height;) {
-                if (cc<height-100) {
-                    NSMutableData *commdata = [NSMutableData dataWithBytes:"\x1d\x76\x30\x00" length:4];
-                    [commdata appendBytes:&wL length:1];
-                    [commdata appendBytes:"\x00" length:1];
-                    [commdata appendBytes:"\x64" length:1];
-                    [commdata appendBytes:"\x00" length:1];
-                    [commdata appendData:[imageData subdataWithRange:NSMakeRange(cc*wL, wL*100)]];
-                    [commdata appendBytes:"\x1b\x4a\x00" length:3];
-                    [_socket writeData:commdata withTimeout:COMM_TIME_OUT tag:2];
-                    cc = cc+100;
-                }else{
-                    int restleng = height - cc;
-                    NSMutableData *commdata = [NSMutableData dataWithBytes:"\x1d\x76\x30\x00" length:4];
-                    [commdata appendBytes:&wL length:1];
-                    [commdata appendBytes:"\x00" length:1];
-                    [commdata appendBytes:&restleng length:1];
-                    [commdata appendBytes:"\x00" length:1];
-                    [commdata appendData:[imageData subdataWithRange:NSMakeRange(cc*wL, restleng*wL)]];
-                    [commdata appendBytes:"\x1b\x4a\x00" length:3];
-                    [_socket writeData:commdata withTimeout:COMM_TIME_OUT tag:2];
-                    cc = cc+restleng;
+        dispatch_queue_t gQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
+        dispatch_async(gQueue, ^{
+            int width = src.size.width;
+            int height = src.size.height;
+            NSData  *initdata = [NSData dataWithBytes:"\x0a" length:1];
+            [_socket writeData:initdata withTimeout:COMM_TIME_OUT tag:1];
+            
+            int wL = (width + 7)/8;
+            CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceGray();
+            
+            CGContextRef context = CGBitmapContextCreate (nil,
+                                                          wL*8,
+                                                          height,
+                                                          8,      // bits per component
+                                                          wL*8,
+                                                          colorSpace,
+                                                          kCGImageAlphaNone);
+            
+            CGColorSpaceRelease(colorSpace);
+            
+            CGContextSetRGBFillColor(context, 1.0, 1.0, 1.0, 1.0);
+            CGContextFillRect(context, CGRectMake(0, 0, wL*8, height));
+            
+#if TARGET_OS_IPHONE
+            CGContextDrawImage(context,
+                               CGRectMake(0, 0, width, height), src.CGImage);
+            
+            UIImage *grayImage = [[UIImage alloc]initWithCGImage:CGBitmapContextCreateImage(context)];
+#else
+            CGContextDrawImage(context,
+                                   CGRectMake(0, 0, width, height), [src CGImageForProposedRect:nil context:nil hints:nil]);
+            
+            NSImage *grayImage = [[NSImage alloc]initWithCGImage:CGBitmapContextCreateImage(context) size:src.size];
+                    
+#endif
+            
+            unsigned char *bitmapData = CGBitmapContextGetData(context);
+            
+            size_t bytesPerRow = CGBitmapContextGetBytesPerRow(context);
+            size_t bufferLength = bytesPerRow * height;
+            
+            NSMutableData *imageData = [NSMutableData data];
+            int counter = 0;
+            int byte = 0;
+            if(bitmapData) {
+                for(int i = 0; i < bufferLength; ++i) {
+                    counter ++;
+                    if (counter>7) {
+                        [imageData appendBytes:&byte length:1];
+                        counter = 0;
+                        byte = 0;
+                    }
+                    int bytes = bitmapData[i];
+                    if (bytes > 128) {
+                        byte = byte << 1;
+                    }else{
+                        byte = byte << 1;
+                        byte = byte + 1;
+                    }
                 }
-                [NSThread sleepForTimeInterval:0.1];
             }
-        }else{
-            NSMutableData *commdata = [NSMutableData dataWithBytes:"\x1d\x76\x30\x00" length:4];
-            [commdata appendBytes:&wL length:1];
-            [commdata appendBytes:"\x00" length:1];
-            [commdata appendBytes:&height length:1];
-            [commdata appendBytes:"\x00" length:1];
-            [commdata appendData:imageData];
-            [commdata appendBytes:"\x0A" length:1];
-            [_socket writeData:commdata withTimeout:COMM_TIME_OUT tag:2];
-        }
-
-    });
+            
+            CGContextRelease(context);
+            
+            dispatch_async(dispatch_get_main_queue(), ^{
+                if ([self.delegate respondsToSelector:@selector(setImageViewImage:)]) {
+                    [_delegate setImageViewImage:grayImage];
+                }
+            });
+            
+            
+            if (height>100) {
+                for (int cc=0; cc<height;) {
+                    if (cc<height-100) {
+                        NSMutableData *commdata = [NSMutableData dataWithBytes:"\x1d\x76\x30\x00" length:4];
+                        [commdata appendBytes:&wL length:1];
+                        [commdata appendBytes:"\x00" length:1];
+                        [commdata appendBytes:"\x64" length:1];
+                        [commdata appendBytes:"\x00" length:1];
+                        [commdata appendData:[imageData subdataWithRange:NSMakeRange(cc*wL, wL*100)]];
+                        [commdata appendBytes:"\x1b\x4a\x00" length:3];
+                        [_socket writeData:commdata withTimeout:COMM_TIME_OUT tag:2];
+                        cc = cc+100;
+                    }else{
+                        int restleng = height - cc;
+                        NSMutableData *commdata = [NSMutableData dataWithBytes:"\x1d\x76\x30\x00" length:4];
+                        [commdata appendBytes:&wL length:1];
+                        [commdata appendBytes:"\x00" length:1];
+                        [commdata appendBytes:&restleng length:1];
+                        [commdata appendBytes:"\x00" length:1];
+                        [commdata appendData:[imageData subdataWithRange:NSMakeRange(cc*wL, restleng*wL)]];
+                        [commdata appendBytes:"\x1b\x4a\x00" length:3];
+                        [_socket writeData:commdata withTimeout:COMM_TIME_OUT tag:2];
+                        cc = cc+restleng;
+                    }
+                    [NSThread sleepForTimeInterval:0.1];
+                }
+            }else{
+                NSMutableData *commdata = [NSMutableData dataWithBytes:"\x1d\x76\x30\x00" length:4];
+                [commdata appendBytes:&wL length:1];
+                [commdata appendBytes:"\x00" length:1];
+                [commdata appendBytes:&height length:1];
+                [commdata appendBytes:"\x00" length:1];
+                [commdata appendData:imageData];
+                [commdata appendBytes:"\x0A" length:1];
+                [_socket writeData:commdata withTimeout:COMM_TIME_OUT tag:2];
+            }
+            
+        });
 }
 
 -(void)printQRCode:(NSString *)string withDimension:(int)imageWidth
@@ -217,7 +229,15 @@ void freeRawData(void *info, const void *data, size_t size) {
     free((unsigned char *)data);
 }
 
+#if TARGET_OS_IPHONE
+    
+- (UIImage *)quickResponseImageForString:(NSString *)dataString withDimension:(int)imageWidth {
+        
+#else
+        
 - (NSImage *)quickResponseImageForString:(NSString *)dataString withDimension:(int)imageWidth {
+            
+#endif
     
     QRcode *resultCode = QRcode_encodeString([dataString UTF8String], 0, QR_ECLEVEL_L, QR_MODE_8, 1);
     
@@ -272,7 +292,15 @@ void freeRawData(void *info, const void *data, size_t size) {
     CGColorRenderingIntent renderingIntent = kCGRenderingIntentDefault;
     CGImageRef imageRef = CGImageCreate(imageWidth, imageWidth, 8, bitsPerPixel, bytesPerLine, colorSpaceRef, bitmapInfo, provider, NULL, NO, renderingIntent);
     
+#if TARGET_OS_IPHONE
+    
+    UIImage *quickResponseImage = [[UIImage alloc]initWithCGImage:imageRef];
+        
+#else
+        
     NSImage *quickResponseImage = [[NSImage alloc]initWithCGImage:imageRef size:NSZeroSize];
+            
+#endif
     
     CGImageRelease(imageRef);
     CGColorSpaceRelease(colorSpaceRef);
