@@ -95,8 +95,16 @@ void freeRawData(void *info, const void *data, size_t size);
     [_socket writeData:stringData withTimeout:COMM_TIME_OUT tag:2];
 }
 
--(void)printImage:(NSImage *)src
-{
+#if TARGET_OS_IPHONE
+
+-(void)printImage:(UIImage *)src{
+
+#else
+
+-(void)printImage:(NSImage *)src{
+
+#endif
+
     dispatch_queue_t gQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
     dispatch_async(gQueue, ^{
         int width = src.size.width;

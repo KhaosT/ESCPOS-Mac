@@ -37,7 +37,16 @@ typedef NS_ENUM(NSInteger, BackgroundColorType) {
 
 -(void)didConnectToHost:(NSString *)host;
 -(void)didDisconnect;
+
+#if TARGET_OS_IPHONE
+
+-(void)setImageViewImage:(UIImage *)image;
+
+#else
+
 -(void)setImageViewImage:(NSImage *)image;
+
+#endif
 
 @end
 
@@ -61,7 +70,17 @@ typedef NS_ENUM(NSInteger, BackgroundColorType) {
 -(void)printBarcode:(NSString *)string Type:(BarCodeType)type;
 -(void)printBarcode:(NSString *)string Type:(BarCodeType)type Height:(int)height;
 -(void)printBarcode:(NSString *)string Type:(BarCodeType)type Height:(int)height Width:(int)width Position:(BarCodeTextPosition)pos;
--(void)printImage:(NSImage *)image;
+
+#if TARGET_OS_IPHONE
+
+-(void)printImage:(UIImage *)src;
+
+#else
+
+-(void)printImage:(NSImage *)src;
+
+#endif
+
 -(void)printQRCode:(NSString *)string withDimension:(int)imageWidth;
 
 @end
