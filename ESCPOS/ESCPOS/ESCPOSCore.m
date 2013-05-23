@@ -97,75 +97,111 @@ void freeRawData(void *info, const void *data, size_t size);
 
 -(void)printImage:(NSImage *)src
 {
-    int width = src.size.width;
-	int height = src.size.height;
-    
-    if (height>255) {
-        NSLog(@"Image Too Large");
-        return;
-    }
-    
-    NSData  *initdata = [NSData dataWithBytes:"\x0a" length:1];
-    [_socket writeData:initdata withTimeout:COMM_TIME_OUT tag:1];
-    
-    int wL = (width + 7)/8;
-	CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceGray();
-    
-	CGContextRef context = CGBitmapContextCreate (nil,
-                                                  wL*8,
-                                                  height,
-                                                  8,      // bits per component
-                                                  0,
-                                                  colorSpace,
-                                                  kCGImageAlphaNone);
-    
-	CGColorSpaceRelease(colorSpace);
-    
-    CGContextSetRGBFillColor(context, 1.0, 1.0, 1.0, 1.0);
-    CGContextFillRect(context, CGRectMake(0, 0, wL*8, height));
-    
-	CGContextDrawImage(context,
-                       CGRectMake(0, 0, width, height), [src CGImageForProposedRect:nil context:nil hints:nil]);
-    
-	NSImage *grayImage = [[NSImage alloc]initWithCGImage:CGBitmapContextCreateImage(context) size:src.size];
-	CGContextRelease(context);
-    NSData* tiffData = [grayImage TIFFRepresentation];
-    NSBitmapImageRep* bitMapRep = [NSBitmapImageRep
-                                   imageRepWithData:tiffData];
-    NSMutableData *tex = [NSMutableData dataWithBytes:[bitMapRep bitmapData] length:[bitMapRep pixelsWide]*[bitMapRep pixelsHigh]*[bitMapRep samplesPerPixel]*sizeof(unsigned char)];
-    NSMutableData *commdata = [NSMutableData dataWithBytes:"\x1d\x76\x30\x00" length:4];
-    [commdata appendBytes:&wL length:1];
-    [commdata appendBytes:"\x00" length:1];
-    [commdata appendBytes:&height length:1];
-    [commdata appendBytes:"\x00" length:1];
-    NSMutableData *imageData = [NSMutableData data];
-    int counter = 0;
-    int byte = 0;
-    for (int i=0;i<tex.length;i++) {
-        counter ++;
-        if (counter>7) {
-            [imageData appendBytes:&byte length:1];
-            counter = 0;
-            byte = 0;
+    dispatch_queue_t gQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
+    dispatch_async(gQueue, ^{
+        int width = src.size.width;
+        int height = src.size.height;
+        
+        NSData  *initdata = [NSData dataWithBytes:"\x0a" length:1];
+        [_socket writeData:initdata withTimeout:COMM_TIME_OUT tag:1];
+        
+        int wL = (width + 7)/8;
+        CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceGray();
+        
+        CGContextRef context = CGBitmapContextCreate (nil,
+                                                      wL*8,
+                                                      height,
+                                                      8,      // bits per component
+                                                      0,
+                                                      colorSpace,
+                                                      kCGImageAlphaNone);
+        
+        CGColorSpaceRelease(colorSpace);
+        
+        CGContextSetRGBFillColor(context, 1.0, 1.0, 1.0, 1.0);
+        CGContextFillRect(context, CGRectMake(0, 0, wL*8, height));
+        
+        CGContextDrawImage(context,
+                           CGRectMake(0, 0, width, height), [src CGImageForProposedRect:nil context:nil hints:nil]);
+        
+        NSImage *grayImage = [[NSImage alloc]initWithCGImage:CGBitmapContextCreateImage(context) size:src.size];
+        CGContextRelease(context);
+        NSData* tiffData = [grayImage TIFFRepresentation];
+        NSBitmapImageRep* bitMapRep = [NSBitmapImageRep
+                                       imageRepWithData:tiffData];
+        NSMutableData *tex = [NSMutableData dataWithBytes:[bitMapRep bitmapData] length:[bitMapRep pixelsWide]*[bitMapRep pixelsHigh]*[bitMapRep samplesPerPixel]*sizeof(unsigned char)];
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [_delegate setImageViewImage:grayImage];
+        });
+        
+        NSMutableData *imageData = [NSMutableData data];
+        int counter = 0;
+        int byte = 0;
+        for (int i=0;i<tex.length;i++) {
+            counter ++;
+            if (counter>7) {
+                [imageData appendBytes:&byte length:1];
+                counter = 0;
+                byte = 0;
+            }
+            char bytes;
+            [tex getBytes:&bytes range:NSMakeRange(i, 1)];
+            if (bytes == -1 || (bytes > -95 && bytes < -1)) {
+                byte = byte << 1;
+            }else{
+                byte = byte << 1;
+                byte = byte + 1;
+            }
         }
-        char bytes;
-        [tex getBytes:&bytes range:NSMakeRange(i, 1)];
-        if (bytes == -1 || (bytes > -95 && bytes < -1)) {
-            byte = byte << 1;
+        [imageData setLength:wL*height];
+        
+        if (height>100) {
+            for (int cc=0; cc<height;) {
+                if (cc<height-100) {
+                    NSMutableData *commdata = [NSMutableData dataWithBytes:"\x1d\x76\x30\x00" length:4];
+                    [commdata appendBytes:&wL length:1];
+                    [commdata appendBytes:"\x00" length:1];
+                    [commdata appendBytes:"\x64" length:1];
+                    [commdata appendBytes:"\x00" length:1];
+                    [commdata appendData:[imageData subdataWithRange:NSMakeRange(cc*wL, wL*100)]];
+                    [commdata appendBytes:"\x1b\x4a\x00" length:3];
+                    [_socket writeData:commdata withTimeout:COMM_TIME_OUT tag:2];
+                    cc = cc+100;
+                }else{
+                    int restleng = height - cc;
+                    NSMutableData *commdata = [NSMutableData dataWithBytes:"\x1d\x76\x30\x00" length:4];
+                    [commdata appendBytes:&wL length:1];
+                    [commdata appendBytes:"\x00" length:1];
+                    [commdata appendBytes:&restleng length:1];
+                    [commdata appendBytes:"\x00" length:1];
+                    [commdata appendData:[imageData subdataWithRange:NSMakeRange(cc*wL, restleng*wL)]];
+                    [commdata appendBytes:"\x1b\x4a\x00" length:3];
+                    [_socket writeData:commdata withTimeout:COMM_TIME_OUT tag:2];
+                    cc = cc+restleng;
+                }
+                [NSThread sleepForTimeInterval:0.1];
+            }
         }else{
-            byte = byte << 1;
-            byte = byte + 1;
+            NSMutableData *commdata = [NSMutableData dataWithBytes:"\x1d\x76\x30\x00" length:4];
+            [commdata appendBytes:&wL length:1];
+            [commdata appendBytes:"\x00" length:1];
+            [commdata appendBytes:&height length:1];
+            [commdata appendBytes:"\x00" length:1];
+            [commdata appendData:imageData];
+            [commdata appendBytes:"\x0A" length:1];
+            [_socket writeData:commdata withTimeout:COMM_TIME_OUT tag:2];
         }
-    }
-    [imageData setLength:wL*height];
-    [commdata appendData:imageData];
-    [commdata appendBytes:"\x0A" length:1];
-    [_socket writeData:commdata withTimeout:COMM_TIME_OUT tag:2];
-    [_delegate setImageViewImage:grayImage];
+
+    });
 }
 
 -(void)printQRCode:(NSString *)string withDimension:(int)imageWidth
 {
+    if (string.length == 0) {
+        return;
+    }
+    
     [self printImage:[self quickResponseImageForString:string withDimension:imageWidth]];
 }
 
