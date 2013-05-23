@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "GCDAsyncSocket.h"
+#import "qrencode.h"
 
 typedef NS_ENUM(NSInteger, BarCodeType) {
 	BARCODE_UPC_A = 0,
@@ -61,5 +62,6 @@ typedef NS_ENUM(NSInteger, BackgroundColorType) {
 -(void)printBarcode:(NSString *)string Type:(BarCodeType)type Height:(int)height;
 -(void)printBarcode:(NSString *)string Type:(BarCodeType)type Height:(int)height Width:(int)width Position:(BarCodeTextPosition)pos;
 -(void)printImage:(NSImage *)image;
+-(void)printQRCode:(NSString *)string withDimension:(int)imageWidth;
 
 @end

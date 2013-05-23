@@ -14,6 +14,14 @@
 		CC095A3E174B6F5F0085118D /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = CC095A3D174B6F5F0085118D /* AppDelegate.m */; };
 		CC095A41174B6F5F0085118D /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = CC095A3F174B6F5F0085118D /* MainMenu.xib */; };
 		CC095A4C174B6F9F0085118D /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC095A4B174B6F9F0085118D /* Security.framework */; };
+		CC57386C174DBC4900418703 /* bitstream.c in Sources */ = {isa = PBXBuildFile; fileRef = CC57385C174DBC4900418703 /* bitstream.c */; };
+		CC57386D174DBC4900418703 /* mask.c in Sources */ = {isa = PBXBuildFile; fileRef = CC57385E174DBC4900418703 /* mask.c */; };
+		CC57386E174DBC4900418703 /* qrenc.c in Sources */ = {isa = PBXBuildFile; fileRef = CC573860174DBC4900418703 /* qrenc.c */; };
+		CC57386F174DBC4900418703 /* qrencode.c in Sources */ = {isa = PBXBuildFile; fileRef = CC573862174DBC4900418703 /* qrencode.c */; };
+		CC573870174DBC4900418703 /* qrinput.c in Sources */ = {isa = PBXBuildFile; fileRef = CC573864174DBC4900418703 /* qrinput.c */; };
+		CC573871174DBC4900418703 /* qrspec.c in Sources */ = {isa = PBXBuildFile; fileRef = CC573866174DBC4900418703 /* qrspec.c */; };
+		CC573872174DBC4900418703 /* rscode.c in Sources */ = {isa = PBXBuildFile; fileRef = CC573868174DBC4900418703 /* rscode.c */; };
+		CC573873174DBC4900418703 /* split.c in Sources */ = {isa = PBXBuildFile; fileRef = CC57386A174DBC4900418703 /* split.c */; };
 		CCDB961F174B7B7200C71B81 /* ESCPOSCore.m in Sources */ = {isa = PBXBuildFile; fileRef = CCDB961E174B7B7200C71B81 /* ESCPOSCore.m */; };
 		CCDB9622174B7B8E00C71B81 /* GCDAsyncSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = CCDB9621174B7B8E00C71B81 /* GCDAsyncSocket.m */; };
 /* End PBXBuildFile section */
@@ -33,6 +41,23 @@
 		CC095A3D174B6F5F0085118D /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		CC095A40174B6F5F0085118D /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MainMenu.xib; sourceTree = "<group>"; };
 		CC095A4B174B6F9F0085118D /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
+		CC57385B174DBC4900418703 /* config.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = config.h; sourceTree = "<group>"; };
+		CC57385C174DBC4900418703 /* bitstream.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = bitstream.c; sourceTree = "<group>"; };
+		CC57385D174DBC4900418703 /* bitstream.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = bitstream.h; sourceTree = "<group>"; };
+		CC57385E174DBC4900418703 /* mask.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = mask.c; sourceTree = "<group>"; };
+		CC57385F174DBC4900418703 /* mask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mask.h; sourceTree = "<group>"; };
+		CC573860174DBC4900418703 /* qrenc.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = qrenc.c; sourceTree = "<group>"; };
+		CC573861174DBC4900418703 /* qrencode_inner.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = qrencode_inner.h; sourceTree = "<group>"; };
+		CC573862174DBC4900418703 /* qrencode.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = qrencode.c; sourceTree = "<group>"; };
+		CC573863174DBC4900418703 /* qrencode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = qrencode.h; sourceTree = "<group>"; };
+		CC573864174DBC4900418703 /* qrinput.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = qrinput.c; sourceTree = "<group>"; };
+		CC573865174DBC4900418703 /* qrinput.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = qrinput.h; sourceTree = "<group>"; };
+		CC573866174DBC4900418703 /* qrspec.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = qrspec.c; sourceTree = "<group>"; };
+		CC573867174DBC4900418703 /* qrspec.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = qrspec.h; sourceTree = "<group>"; };
+		CC573868174DBC4900418703 /* rscode.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = rscode.c; sourceTree = "<group>"; };
+		CC573869174DBC4900418703 /* rscode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = rscode.h; sourceTree = "<group>"; };
+		CC57386A174DBC4900418703 /* split.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = split.c; sourceTree = "<group>"; };
+		CC57386B174DBC4900418703 /* split.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = split.h; sourceTree = "<group>"; };
 		CCDB961D174B7B7200C71B81 /* ESCPOSCore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ESCPOSCore.h; sourceTree = "<group>"; };
 		CCDB961E174B7B7200C71B81 /* ESCPOSCore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ESCPOSCore.m; sourceTree = "<group>"; };
 		CCDB9620174B7B8E00C71B81 /* GCDAsyncSocket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GCDAsyncSocket.h; sourceTree = "<group>"; };
@@ -92,6 +117,7 @@
 		CC095A30174B6F5F0085118D /* ESCPOS */ = {
 			isa = PBXGroup;
 			children = (
+				CC57385A174DBC3F00418703 /* QRLib */,
 				CC095A47174B6F6B0085118D /* TCP */,
 				CC095A3C174B6F5F0085118D /* AppDelegate.h */,
 				CC095A3D174B6F5F0085118D /* AppDelegate.m */,
@@ -122,6 +148,30 @@
 				CCDB9621174B7B8E00C71B81 /* GCDAsyncSocket.m */,
 			);
 			name = TCP;
+			sourceTree = "<group>";
+		};
+		CC57385A174DBC3F00418703 /* QRLib */ = {
+			isa = PBXGroup;
+			children = (
+				CC57385B174DBC4900418703 /* config.h */,
+				CC57385C174DBC4900418703 /* bitstream.c */,
+				CC57385D174DBC4900418703 /* bitstream.h */,
+				CC57385E174DBC4900418703 /* mask.c */,
+				CC57385F174DBC4900418703 /* mask.h */,
+				CC573860174DBC4900418703 /* qrenc.c */,
+				CC573861174DBC4900418703 /* qrencode_inner.h */,
+				CC573862174DBC4900418703 /* qrencode.c */,
+				CC573863174DBC4900418703 /* qrencode.h */,
+				CC573864174DBC4900418703 /* qrinput.c */,
+				CC573865174DBC4900418703 /* qrinput.h */,
+				CC573866174DBC4900418703 /* qrspec.c */,
+				CC573867174DBC4900418703 /* qrspec.h */,
+				CC573868174DBC4900418703 /* rscode.c */,
+				CC573869174DBC4900418703 /* rscode.h */,
+				CC57386A174DBC4900418703 /* split.c */,
+				CC57386B174DBC4900418703 /* split.h */,
+			);
+			name = QRLib;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -192,6 +242,14 @@
 				CC095A3E174B6F5F0085118D /* AppDelegate.m in Sources */,
 				CCDB961F174B7B7200C71B81 /* ESCPOSCore.m in Sources */,
 				CCDB9622174B7B8E00C71B81 /* GCDAsyncSocket.m in Sources */,
+				CC57386C174DBC4900418703 /* bitstream.c in Sources */,
+				CC57386D174DBC4900418703 /* mask.c in Sources */,
+				CC57386E174DBC4900418703 /* qrenc.c in Sources */,
+				CC57386F174DBC4900418703 /* qrencode.c in Sources */,
+				CC573870174DBC4900418703 /* qrinput.c in Sources */,
+				CC573871174DBC4900418703 /* qrspec.c in Sources */,
+				CC573872174DBC4900418703 /* rscode.c in Sources */,
+				CC573873174DBC4900418703 /* split.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -291,6 +349,10 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "ESCPOS/ESCPOS-Prefix.pch";
 				INFOPLIST_FILE = "ESCPOS/ESCPOS-Info.plist";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/ESCPOS\"",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
@@ -303,6 +365,10 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "ESCPOS/ESCPOS-Prefix.pch";
 				INFOPLIST_FILE = "ESCPOS/ESCPOS-Info.plist";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/ESCPOS\"",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};

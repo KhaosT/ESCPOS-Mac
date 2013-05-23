@@ -20,6 +20,10 @@
 @property (weak) IBOutlet NSSlider *BarCodeSize;
 @property (weak) IBOutlet NSTextField *BarCodeSizeDisplay;
 @property (weak) IBOutlet NSImageView *ImageView;
+@property (weak) IBOutlet NSButton *BarCodeButton;
+@property (weak) IBOutlet NSButton *PLRButton;
+@property (weak) IBOutlet NSButton *PaperCutButton;
+@property (weak) IBOutlet NSButton *QRButton;
 
 - (IBAction)Connect:(id)sender;
 - (IBAction)PrintTest:(id)sender;
@@ -28,5 +32,6 @@
 - (IBAction)BarCodeSizeDidChange:(id)sender;
 - (IBAction)printImageAct:(id)sender;
 - (IBAction)printLeftRight:(id)sender;
+- (IBAction)printQRCode:(id)sender;
 
 @end
