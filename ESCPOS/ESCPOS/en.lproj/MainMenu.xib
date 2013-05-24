@@ -1420,8 +1420,8 @@
 							<string key="NSReuseIdentifierKey">_NS:9</string>
 							<bool key="NSEnabled">YES</bool>
 							<object class="NSTextFieldCell" key="NSCell" id="173339810">
-								<int key="NSCellFlags">-1804599231</int>
-								<int key="NSCellFlags2">272630784</int>
+								<int key="NSCellFlags">-1267728319</int>
+								<int key="NSCellFlags2">268436480</int>
 								<string key="NSContents"/>
 								<reference key="NSSupport" ref="1069831685"/>
 								<string key="NSPlaceholderString">测试文本</string>
@@ -2645,6 +2645,14 @@
 						<reference key="destination" ref="156866834"/>
 					</object>
 					<int key="connectionID">689</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBActionConnection" key="connection">
+						<string key="label">PrintTest:</string>
+						<reference key="source" ref="976324537"/>
+						<reference key="destination" ref="1065074792"/>
+					</object>
+					<int key="connectionID">690</int>
 				</object>
 			</array>
 			<object class="IBMutableOrderedSet" key="objectRecords">
@@ -4875,7 +4883,7 @@
 			<nil key="activeLocalization"/>
 			<dictionary class="NSMutableDictionary" key="localizations"/>
 			<nil key="sourceID"/>
-			<int key="maxID">689</int>
+			<int key="maxID">690</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<array class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -4936,6 +4944,7 @@
 						<string key="PLRButton">NSButton</string>
 						<string key="PaperCutButton">NSButton</string>
 						<string key="QRButton">NSButton</string>
+						<string key="RePrintButton">NSButton</string>
 						<string key="TestButton">NSButton</string>
 						<string key="addressField">NSTextField</string>
 						<string key="conntectButton">NSButton</string>
@@ -4976,6 +4985,10 @@
 						</object>
 						<object class="IBToOneOutletInfo" key="QRButton">
 							<string key="name">QRButton</string>
+							<string key="candidateClassName">NSButton</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="RePrintButton">
+							<string key="name">RePrintButton</string>
 							<string key="candidateClassName">NSButton</string>
 						</object>
 						<object class="IBToOneOutletInfo" key="TestButton">

@@ -8,12 +8,13 @@
 
 #import "ESCPOSCore.h"
 
-#define COMM_TIME_OUT           0.1
-#define NSGB18030StringEncoding 0x80000631
+#define COMM_TIME_OUT           0.5
 
 void freeRawData(void *info, const void *data, size_t size);
 
-@implementation ESCPOSCore
+@implementation ESCPOSCore{
+    NSStringEncoding GB18030Encoding;
+}
 
 +(ESCPOSCore *)CoreManager
 {
@@ -21,8 +22,14 @@ void freeRawData(void *info, const void *data, size_t size);
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         CoreManager = [[self alloc]init];
+        [CoreManager setup];
     });
     return CoreManager;
+}
+
+-(void)setup
+{
+    GB18030Encoding = CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingGB_18030_2000);
 }
 
 -(void)connectToAddress:(NSString *)address Delegate:(id)delegate
@@ -51,7 +58,7 @@ void freeRawData(void *info, const void *data, size_t size);
 
 -(void)printString:(NSString *)string
 {
-    NSMutableData *commdata = [[string dataUsingEncoding:NSGB18030StringEncoding]mutableCopy];
+    NSMutableData *commdata = [[string dataUsingEncoding:GB18030Encoding]mutableCopy];
     [commdata appendBytes:"\x0A" length:1];
     [_socket writeData:commdata withTimeout:COMM_TIME_OUT tag:2];
 }
@@ -59,7 +66,7 @@ void freeRawData(void *info, const void *data, size_t size);
 -(void)printLeftString:(NSString *)lstring RightString:(NSString *)rstring
 {
     NSMutableString *str = [lstring mutableCopy];
-    for (int i=0;i<32-(int)[lstring lengthOfBytesUsingEncoding:NSGB18030StringEncoding]-(int)[rstring lengthOfBytesUsingEncoding:NSGB18030StringEncoding];i++) {
+    for (int i=0;i<32-(int)[lstring lengthOfBytesUsingEncoding:GB18030Encoding]-(int)[rstring lengthOfBytesUsingEncoding:GB18030Encoding];i++) {
         [str appendString:@" "];
     }
     [str appendString:rstring];
@@ -158,7 +165,7 @@ void freeRawData(void *info, const void *data, size_t size);
                         byte = 0;
                     }
                     int bytes = bitmapData[i];
-                    if (bytes > 144) {
+                    if (bytes > 128) {
                         byte = byte << 1;
                     }else{
                         byte = byte << 1;
@@ -200,7 +207,7 @@ void freeRawData(void *info, const void *data, size_t size);
                         [_socket writeData:commdata withTimeout:COMM_TIME_OUT tag:2];
                         cc = cc+restleng;
                     }
-                    [NSThread sleepForTimeInterval:0.2];
+                    [NSThread sleepForTimeInterval:0.1];
                 }
             }else{
                 NSMutableData *commdata = [NSMutableData dataWithBytes:"\x1d\x76\x30\x00" length:4];
@@ -312,7 +319,7 @@ void freeRawData(void *info, const void *data, size_t size) {
 
 -(void)cutPaper
 {
-    NSMutableData *commdata = [[@"\n\n\n\n\n\n" dataUsingEncoding:NSGB18030StringEncoding]mutableCopy];
+    NSMutableData *commdata = [[@"\n\n\n\n\n\n" dataUsingEncoding:GB18030Encoding]mutableCopy];
     [commdata appendBytes:"\x1d\x56\x00" length:3];
     [_socket writeData:commdata withTimeout:COMM_TIME_OUT tag:2];
 }

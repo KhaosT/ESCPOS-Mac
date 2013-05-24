@@ -71,6 +71,7 @@
 - (void)didConnectToHost:(NSString *)host
 {
     [_TestButton setEnabled:YES];
+    [_ContentField setEnabled:YES];
     [_QRButton setEnabled:YES];
     [_BarCodeButton setEnabled:YES];
     [_PLRButton setEnabled:YES];
@@ -83,6 +84,7 @@
 - (void)didDisconnect
 {
     [_TestButton setEnabled:NO];
+    [_ContentField setEnabled:NO];
     [_RePrintButton setEnabled:NO];
     [_QRButton setEnabled:NO];
     [_BarCodeButton setEnabled:NO];
